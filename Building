@@ -1,0 +1,313 @@
+/*
+ * OGL01Shape3D.cpp: 3D Shapes
+ */
+#include <windows.h>  // for MS Windows
+#include <GL/glut.h>  // GLUT, include glu.h and gl.h
+
+/* Global variables */
+char title[] = "3D Shapes";
+
+/* Initialize OpenGL Graphics */
+void initGL() {
+   glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
+   glClearDepth(1.0f);                   // Set background depth to farthest
+   glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
+   glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
+   glShadeModel(GL_SMOOTH);   // Enable smooth shading
+   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Nice perspective corrections
+}
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
+    glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
+
+    // Render a color-cube consisting of 6 quads with different colors
+    glLoadIdentity();                 // Reset the model-view matrix
+    glTranslatef(0.0f, 0.0f, -9.0f);  // Move right and into the screen
+    //glRotatef(45.0f, 0.5f, 1.0f, 0.1f);
+
+
+    glLineWidth(3.0f); // 3 pixels wide
+    glBegin(GL_LINES);
+        glColor3f(0.0f, 0.0f, 1.0f);
+        glVertex3f(0.0f, 1.0f, 0.01f); // start point slightly in front
+        glVertex3f(0.0f, 0.0f, 0.01f);  // end point slightly in front
+    glEnd();
+
+    glBegin(GL_TRIANGLES);
+        glColor3f(1.0f, 0.0f, 0.0f);   // Red color
+        glVertex3f(0.0f, 0.0f, 0.0f);  // Top vertex at end of line
+        glVertex3f(-1.0f, -1.0f, 0.0f); // Bottom-left vertex relative to top
+        glVertex3f(0.0f, -1.0f, 0.0f);  // Bottom-right vertex relative to top
+    glEnd();
+    glBegin(GL_TRIANGLES);
+        glColor3f(1.0f, 0.0f, 0.0f);   // Red color
+        glVertex3f(0.0f, 0.0f, 0.0f);  // Top vertex at end of line
+        glVertex3f(0.0f, -1.0f, 0.0f); // Bottom-left vertex relative to top
+        glVertex3f(1.0f, -1.0f, 0.0f);  // Bottom-right vertex relative to top
+    glEnd();
+
+    glBegin(GL_QUADS);
+
+        // Front face
+        glColor3f(0.0f, 1.0f, 0.0f);   // Green
+        glVertex3f(-1.0f, -1.0f, 0.5f);
+        glVertex3f( 1.0f, -1.0f, 0.5f);
+        glVertex3f( 1.0f, -1.5f, 0.5f);
+        glVertex3f(-1.0f, -1.5f, 0.5f);
+
+        // Back face
+        glColor3f(0.0f, 0.5f, 0.0f);   // Dark green
+        glVertex3f(-1.0f, -1.0f, -0.5f);
+        glVertex3f( 1.0f, -1.0f, -0.5f);
+        glVertex3f( 1.0f, -1.5f, -0.5f);
+        glVertex3f(-1.0f, -1.5f, -0.5f);
+
+        // Left face
+        glColor3f(0.0f, 0.7f, 0.0f);
+        glVertex3f(-1.0f, -1.0f, -0.5f);
+        glVertex3f(-1.0f, -1.0f, 0.5f);
+        glVertex3f(-1.0f, -1.5f, 0.5f);
+        glVertex3f(-1.0f, -1.5f, -0.5f);
+
+        // Right face
+        glColor3f(0.0f, 0.9f, 0.0f);
+        glVertex3f(1.0f, -1.0f, -0.5f);
+        glVertex3f(1.0f, -1.0f, 0.5f);
+        glVertex3f(1.0f, -1.5f, 0.5f);
+        glVertex3f(1.0f, -1.5f, -0.5f);
+
+        // Top face
+        glColor3f(0.0f, 1.0f, 0.5f);
+        glVertex3f(-1.0f, -1.5f, 0.5f);
+        glVertex3f( 1.0f, -1.5f, 0.5f);
+        glVertex3f( 1.0f, -1.5f, -0.5f);
+        glVertex3f(-1.0f, -1.5f, -0.5f);
+
+        // Bottom face
+        glColor3f(0.0f, 0.5f, 0.25f);
+        glVertex3f(-1.0f, -1.0f, 0.5f);
+        glVertex3f( 1.0f, -1.0f, 0.5f);
+        glVertex3f( 1.0f, -1.0f, -0.5f);
+        glVertex3f(-1.0f, -1.0f, -0.5f);
+
+    glEnd();
+
+    // Second cuboid: height = 1.0 (Y: -1.5 to -2.5)
+    glBegin(GL_QUADS);
+
+        // Front
+        glColor3f(1.0f, 1.0f, 0.0f);
+        glVertex3f(-1.0f, -1.5f, 0.5f);
+        glVertex3f( 1.0f, -1.5f, 0.5f);
+        glVertex3f( 1.0f, -2.5f, 0.5f);
+        glVertex3f(-1.0f, -2.5f, 0.5f);
+
+        // Back
+        glColor3f(0.5f, 0.5f, 0.0f);
+        glVertex3f(-1.0f, -1.5f, -0.5f);
+        glVertex3f( 1.0f, -1.5f, -0.5f);
+        glVertex3f( 1.0f, -2.5f, -0.5f);
+        glVertex3f(-1.0f, -2.5f, -0.5f);
+
+        // Left
+        glColor3f(0.7f, 0.7f, 0.0f);
+        glVertex3f(-1.0f, -1.5f, -0.5f);
+        glVertex3f(-1.0f, -1.5f,  0.5f);
+        glVertex3f(-1.0f, -2.5f,  0.5f);
+        glVertex3f(-1.0f, -2.5f, -0.5f);
+
+        // Right
+        glColor3f(0.9f, 0.9f, 0.0f);
+        glVertex3f(1.0f, -1.5f, -0.5f);
+        glVertex3f(1.0f, -1.5f,  0.5f);
+        glVertex3f(1.0f, -2.5f,  0.5f);
+        glVertex3f(1.0f, -2.5f, -0.5f);
+
+        // Top
+        glColor3f(1.0f, 1.0f, 0.5f);
+        glVertex3f(-1.0f, -2.5f,  0.5f);
+        glVertex3f( 1.0f, -2.5f,  0.5f);
+        glVertex3f( 1.0f, -2.5f, -0.5f);
+        glVertex3f(-1.0f, -2.5f, -0.5f);
+
+        // Bottom
+        glColor3f(0.5f, 0.5f, 0.25f);
+        glVertex3f(-1.0f, -1.5f,  0.5f);
+        glVertex3f( 1.0f, -1.5f,  0.5f);
+        glVertex3f( 1.0f, -1.5f, -0.5f);
+        glVertex3f(-1.0f, -1.5f, -0.5f);
+
+    glEnd();
+
+    // Third cuboid: height = 0.5 (Y: -2.5 to -3.0), width = 2.5 (-1.25 to 1.25)
+    glBegin(GL_QUADS);
+
+        // Front
+        glColor3f(0.0f, 0.5f, 1.0f);
+        glVertex3f(-1.25f, -2.5f, 0.5f);
+        glVertex3f( 1.25f, -2.5f, 0.5f);
+        glVertex3f( 1.25f, -3.0f, 0.5f);
+        glVertex3f(-1.25f, -3.0f, 0.5f);
+
+        // Back
+        glColor3f(0.0f, 0.25f, 0.5f);
+        glVertex3f(-1.25f, -2.5f, -0.5f);
+        glVertex3f( 1.25f, -2.5f, -0.5f);
+        glVertex3f( 1.25f, -3.0f, -0.5f);
+        glVertex3f(-1.25f, -3.0f, -0.5f);
+
+        // Left
+        glColor3f(0.0f, 0.35f, 0.7f);
+        glVertex3f(-1.25f, -2.5f, -0.5f);
+        glVertex3f(-1.25f, -2.5f,  0.5f);
+        glVertex3f(-1.25f, -3.0f,  0.5f);
+        glVertex3f(-1.25f, -3.0f, -0.5f);
+
+        // Right
+        glColor3f(0.0f, 0.45f, 0.9f);
+        glVertex3f(1.25f, -2.5f, -0.5f);
+        glVertex3f(1.25f, -2.5f,  0.5f);
+        glVertex3f(1.25f, -3.0f,  0.5f);
+        glVertex3f(1.25f, -3.0f, -0.5f);
+
+        // Top
+        glColor3f(0.0f, 0.6f, 1.0f);
+        glVertex3f(-1.25f, -3.0f,  0.5f);
+        glVertex3f( 1.25f, -3.0f,  0.5f);
+        glVertex3f( 1.25f, -3.0f, -0.5f);
+        glVertex3f(-1.25f, -3.0f, -0.5f);
+
+        // Bottom
+        glColor3f(0.0f, 0.3f, 0.5f);
+        glVertex3f(-1.25f, -2.5f,  0.5f);
+        glVertex3f( 1.25f, -2.5f,  0.5f);
+        glVertex3f( 1.25f, -2.5f, -0.5f);
+        glVertex3f(-1.25f, -2.5f, -0.5f);
+
+    glEnd();
+
+    // Fourth cuboid: height = 1.5 (Y: -3.0 to -4.5), width = 2.75 (-1.375 to 1.375)
+    glBegin(GL_QUADS);
+
+        // Front
+        glColor3f(1.0f, 0.3f, 0.3f);
+        glVertex3f(-1.375f, -3.0f, 0.5f);
+        glVertex3f( 1.375f, -3.0f, 0.5f);
+        glVertex3f( 1.375f, -4.5f, 0.5f);
+        glVertex3f(-1.375f, -4.5f, 0.5f);
+
+        // Back
+        glColor3f(0.5f, 0.15f, 0.15f);
+        glVertex3f(-1.375f, -3.0f, -0.5f);
+        glVertex3f( 1.375f, -3.0f, -0.5f);
+        glVertex3f( 1.375f, -4.5f, -0.5f);
+        glVertex3f(-1.375f, -4.5f, -0.5f);
+
+        // Left
+        glColor3f(0.7f, 0.2f, 0.2f);
+        glVertex3f(-1.375f, -3.0f, -0.5f);
+        glVertex3f(-1.375f, -3.0f,  0.5f);
+        glVertex3f(-1.375f, -4.5f,  0.5f);
+        glVertex3f(-1.375f, -4.5f, -0.5f);
+
+        // Right
+        glColor3f(0.9f, 0.25f, 0.25f);
+        glVertex3f(1.375f, -3.0f, -0.5f);
+        glVertex3f(1.375f, -3.0f,  0.5f);
+        glVertex3f(1.375f, -4.5f,  0.5f);
+        glVertex3f(1.375f, -4.5f, -0.5f);
+
+        // Top
+        glColor3f(1.0f, 0.5f, 0.5f);
+        glVertex3f(-1.375f, -4.5f,  0.5f);
+        glVertex3f( 1.375f, -4.5f,  0.5f);
+        glVertex3f( 1.375f, -4.5f, -0.5f);
+        glVertex3f(-1.375f, -4.5f, -0.5f);
+
+        // Bottom
+        glColor3f(0.5f, 0.25f, 0.25f);
+        glVertex3f(-1.375f, -3.0f,  0.5f);
+        glVertex3f( 1.375f, -3.0f,  0.5f);
+        glVertex3f( 1.375f, -3.0f, -0.5f);
+        glVertex3f(-1.375f, -3.0f, -0.5f);
+
+    glEnd();
+
+    // Parking area: height = 0.25 (Y: -4.5 to -4.75), width = 5.0 (-2.5 to 2.5), depth = 1.0 (-0.5 to 0.5)
+    glBegin(GL_QUADS);
+
+        // Front
+        glColor3f(0.6f, 0.6f, 0.6f); // Gray platform
+        glVertex3f(-2.5f, -4.5f, 0.5f);
+        glVertex3f( 2.5f, -4.5f, 0.5f);
+        glVertex3f( 2.5f, -4.75f, 0.5f);
+        glVertex3f(-2.5f, -4.75f, 0.5f);
+
+        // Back
+        glColor3f(0.4f, 0.4f, 0.4f);
+        glVertex3f(-2.5f, -4.5f, -0.5f);
+        glVertex3f( 2.5f, -4.5f, -0.5f);
+        glVertex3f( 2.5f, -4.75f, -0.5f);
+        glVertex3f(-2.5f, -4.75f, -0.5f);
+
+        // Left
+        glColor3f(0.5f, 0.5f, 0.5f);
+        glVertex3f(-2.5f, -4.5f, -0.5f);
+        glVertex3f(-2.5f, -4.5f,  0.5f);
+        glVertex3f(-2.5f, -4.75f,  0.5f);
+        glVertex3f(-2.5f, -4.75f, -0.5f);
+
+        // Right
+        glColor3f(0.5f, 0.5f, 0.5f);
+        glVertex3f(2.5f, -4.5f, -0.5f);
+        glVertex3f(2.5f, -4.5f,  0.5f);
+        glVertex3f(2.5f, -4.75f,  0.5f);
+        glVertex3f(2.5f, -4.75f, -0.5f);
+
+        // Top
+        glColor3f(0.7f, 0.7f, 0.7f);
+        glVertex3f(-2.5f, -4.75f,  0.5f);
+        glVertex3f( 2.5f, -4.75f,  0.5f);
+        glVertex3f( 2.5f, -4.75f, -0.5f);
+        glVertex3f(-2.5f, -4.75f, -0.5f);
+
+        // Bottom
+        glColor3f(0.3f, 0.3f, 0.3f);
+        glVertex3f(-2.5f, -4.5f,  0.5f);
+        glVertex3f( 2.5f, -4.5f,  0.5f);
+        glVertex3f( 2.5f, -4.5f, -0.5f);
+        glVertex3f(-2.5f, -4.5f, -0.5f);
+
+    glEnd();
+
+
+   glutSwapBuffers();
+}
+
+void reshape(GLsizei width, GLsizei height) {  // GLsizei for non-negative integer
+   // Compute aspect ratio of the new window
+   if (height == 0) height = 1;                // To prevent divide by 0
+   GLfloat aspect = (GLfloat)width / (GLfloat)height;
+
+   // Set the viewport to cover the new window
+   glViewport(0, 0, width, height);
+
+   // Set the aspect ratio of the clipping volume to match the viewport
+   glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
+   glLoadIdentity();             // Reset
+   gluPerspective(70.0f, aspect, 0.1f, 100.0f);
+}
+
+/* Main function: GLUT runs as a console application starting at main() */
+int main(int argc, char** argv) {
+   glutInit(&argc, argv);            // Initialize GLUT
+   glutInitDisplayMode(GLUT_DOUBLE); // Enable double buffered mode
+   glutInitWindowSize(840, 680);
+   glutCreateWindow(title);          // Create window with the given title
+   glutDisplayFunc(display);       // Register callback handler for window re-paint event
+   glutReshapeFunc(reshape);       // Register callback handler for window re-size event
+   initGL();                       // Our own OpenGL initialization
+   glutMainLoop();                 // Enter the infinite event-processing loop
+   return 0;
+}
