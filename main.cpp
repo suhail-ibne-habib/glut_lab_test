@@ -1,32 +1,34 @@
-/*
- * OGL01Shape3D.cpp: 3D Shapes
- */
-#include <windows.h>  // for MS Windows
-#include <GL/glut.h>  // GLUT, include glu.h and gl.h
+#include <windows.h>
+#include <GL/glut.h>
 
-/* Global variables */
 char title[] = "3D Shapes";
 
-/* Initialize OpenGL Graphics */
+float rotateX = 0.0f, rotateY = 0.0f;
+float translateX = 0.0f, translateY = 0.0f;
+
+
 void initGL() {
-   glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
-   glClearDepth(1.0f);                   // Set background depth to farthest
-   glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
-   glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
-   glShadeModel(GL_SMOOTH);   // Enable smooth shading
-   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Nice perspective corrections
+   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+   glClearDepth(1.0f);
+   glEnable(GL_DEPTH_TEST);
+   glDepthFunc(GL_LEQUAL);
+   glShadeModel(GL_SMOOTH);
+   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
 
 void display() {
-   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
-   glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   glMatrixMode(GL_MODELVIEW);
 
-   // Render a color-cube consisting of 6 quads with different colors
-   glLoadIdentity();                 // Reset the model-view matrix
-   glTranslatef(0.0f, 2.0f, -12.0f);  // Move right and into the screen
-   glRotatef(45.0f, 0.5f, 1.0f, 0.1f);
+   glLoadIdentity();
+   // glTranslatef(0.0f, 2.0f, -12.0f);
+   // glRotatef(45.0f, 0.5f, 1.0f, 0.1f);
 
-   glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
+   glTranslatef(translateX, translateY + 2.0f, -12.0f);  // Add translation
+   glRotatef(rotateX, 1.0f, 0.0f, 0.0f);                 // Rotate on X
+   glRotatef(rotateY, 0.0f, 1.0f, 0.0f);                 // Rotate on Y
+
+   glBegin(GL_QUADS);
 
         // Front face  (z = 1.0f)
         glColor3f(0.0f, 1.0f, 0.0f);     // Red
@@ -142,7 +144,7 @@ void display() {
         glVertex3f(-3.0f,  -5.0f,  -1.0f);
         glVertex3f(-1.0f,  -5.0f,  -1.0f);
 
-        // 4rth cube in tail left side
+        // 4th cube in tail left side
 
         // Top face (y = 3.0f)
         glColor3f(0.0f, 0.0f, 1.0f);     // Blue
@@ -209,36 +211,93 @@ void display() {
         glVertex3f(-1.0f, -5.0f, 5.0f);
         glVertex3f(-1.0f, -5.0f, 1.0f);
 
+        // Right face for Tail Right Cube
+        glColor3f(1.0f, 0.0f, 1.0f);  // Magenta
+        glVertex3f( 1.0f, -3.0f, 1.0f );
+        glVertex3f( 1.0f, -3.0f, 5.0f );
+        glVertex3f( 1.0f, -5.0f, 5.0f );
+        glVertex3f( 1.0f, -5.0f, 1.0f );
 
-   glEnd();  // End of drawing color-cube
+        // Back face for Tail Right Cube
+        glColor3f(1.0f, 1.0f, 0.0f);  // Yellow
+        glVertex3f( 1.0f, -3.0f, 1.0f );
+        glVertex3f(-1.0f, -3.0f, 1.0f );
+        glVertex3f(-1.0f, -5.0f, 1.0f );
+        glVertex3f( 1.0f, -5.0f, 1.0f );
 
 
-   glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
+
+   glEnd();
+
+
+   glutSwapBuffers();
 }
 
-void reshape(GLsizei width, GLsizei height) {  // GLsizei for non-negative integer
-   // Compute aspect ratio of the new window
-   if (height == 0) height = 1;                // To prevent divide by 0
+void handleKeys(unsigned char key, int x, int y) {
+    switch (key) {
+        case 27: // ESC key
+            exit(0);
+        case 'w':
+        case 'W':
+            translateY += 0.2f;
+            break;
+        case 's':
+        case 'S':
+            translateY -= 0.2f;
+            break;
+        case 'a':
+        case 'A':
+            translateX -= 0.2f;
+            break;
+        case 'd':
+        case 'D':
+            translateX += 0.2f;
+            break;
+    }
+    glutPostRedisplay();
+}
+
+void specialKeys(int key, int x, int y) {
+    switch (key) {
+        case GLUT_KEY_RIGHT:
+            rotateY += 5.0f;
+            break;
+        case GLUT_KEY_LEFT:
+            rotateY -= 5.0f;
+            break;
+        case GLUT_KEY_UP:
+            rotateX += 5.0f;
+            break;
+        case GLUT_KEY_DOWN:
+            rotateX -= 5.0f;
+            break;
+    }
+    glutPostRedisplay();
+}
+
+
+void reshape(GLsizei width, GLsizei height) {
+
+   if (height == 0) height = 1;
    GLfloat aspect = (GLfloat)width / (GLfloat)height;
 
-   // Set the viewport to cover the new window
    glViewport(0, 0, width, height);
 
-   // Set the aspect ratio of the clipping volume to match the viewport
-   glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
-   glLoadIdentity();             // Reset
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
    gluPerspective(70.0f, aspect, 0.1f, 100.0f);
 }
 
-/* Main function: GLUT runs as a console application starting at main() */
 int main(int argc, char** argv) {
-   glutInit(&argc, argv);            // Initialize GLUT
-   glutInitDisplayMode(GLUT_DOUBLE); // Enable double buffered mode
+   glutInit(&argc, argv);
+   glutInitDisplayMode(GLUT_DOUBLE);
    glutInitWindowSize(840, 680);
-   glutCreateWindow(title);          // Create window with the given title
-   glutDisplayFunc(display);       // Register callback handler for window re-paint event
-   glutReshapeFunc(reshape);       // Register callback handler for window re-size event
-   initGL();                       // Our own OpenGL initialization
-   glutMainLoop();                 // Enter the infinite event-processing loop
+   glutCreateWindow(title);
+   glutDisplayFunc(display);
+   glutReshapeFunc(reshape);
+   glutKeyboardFunc(handleKeys);
+   glutSpecialFunc(specialKeys);
+   initGL();
+   glutMainLoop();
    return 0;
 }
